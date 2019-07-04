@@ -1,0 +1,20 @@
+<style>
+</style>
+
+
+<div>
+    <h1>Demo ISADevDays 2019</h1>
+    <div ng-repeat="product in model.productos">
+        <h3>{{product.titulo}}</h3>
+        <img src="{{product.imagen}}" width="200px">
+        <button ng-click="anadirCesta(product);">Añadir a la cesta</button>
+    </div>
+
+    <h2> Cesta: </h2>
+    <div ng-repeat="compra in cesta">
+        <h3>{{compra.titulo}}</h3>
+        <h4>{{compra.cantidad}} x {{compra.precio}}€</h4>
+    </div>
+    <h3>Total: {{total}}€</h3>
+
+</div>

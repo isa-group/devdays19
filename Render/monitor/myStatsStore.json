@@ -1,0 +1,44 @@
+[
+  {
+    "timeStamp": 1519698634215,
+    "time": 588,
+    "hash": "0b3a0182a986767b1027",
+    "errors": [],
+    "size": 781,
+    "assets": [
+      {
+        "name": "./js-bundles/bundle.js",
+        "chunks": [
+          0
+        ],
+        "size": 577,
+        "minified": true
+      },
+      {
+        "name": "index.html",
+        "chunks": [],
+        "size": 204
+      }
+    ],
+    "chunks": [
+      {
+        "size": 166,
+        "files": [
+          "./js-bundles/bundle.js"
+        ],
+        "modules": [
+          {
+            "name": "./src/frontend/index.js",
+            "size": 138,
+            "id": 0
+          },
+          {
+            "name": "multi ./src/frontend/index.js",
+            "size": 28,
+            "id": 1
+          }
+        ]
+      }
+    ]
+  }
+]

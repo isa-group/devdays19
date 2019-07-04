@@ -1,0 +1,16 @@
+{
+    "productos": {
+        "agua": {
+            "titulo": "Agua",
+            "imagen": "https://cadenaser00.epimg.net/ser/imagenes/2018/03/14/ciencia/1521041305_960472_1521042027_noticia_normal.jpg",
+            "precio": 100,
+            "stock": 3
+        },
+        "pan": {
+            "titulo": "Pan",
+            "imagen": "https://www.lesaffre.es/wp-content/uploads/2017/04/pan-corteza-blanda.jpg",
+            "precio": 70,
+            "stock": 10
+        }
+    }
+}
