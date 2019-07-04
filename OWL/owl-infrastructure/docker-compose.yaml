@@ -1,0 +1,43 @@
+version: '2.2'
+services:
+  owl_grafana:
+    container_name: owl-grafana-container
+    image: grafana/grafana:6.1.0
+    environment:
+      - SERVICE_NAME=owl-grafana-container
+      - NODE_ENV=production
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - 'owl_grafana_volume:/var/lib/grafana'
+      - './grafana-provisioning:/etc/grafana/provisioning'
+      - './grafana-dashboards:/usr/share/grafana/public/dashboards'
+    mem_limit: 400m
+    restart: 'unless-stopped'
+  owl_registry_db:
+    environment:
+      - SERVICE_NAME=owl-registry-db-container
+    container_name: owl-registry-db-container
+    image: mongo
+    ports:
+      - '127.0.0.1:27017:27017'
+    volumes:
+      - 'owl_registry_db_volume:/data/db'
+      - './data2import:/data2import'
+    mem_limit: 500m
+    restart: 'unless-stopped'
+  owl_influxdb:
+    image: 'influxdb:latest'
+    container_name: owl-influxdb-container
+    ports:
+      - '127.0.0.1:8086:8086'
+    volumes:
+      - 'owl_influxdb_volume:/var/lib/influxdb'
+      - './influxdb:/etc/influxdb'
+      - './data2import/influxdb:/var/backups'
+    mem_limit: 600m
+    restart: 'unless-stopped'
+volumes:
+  owl_influxdb_volume: null
+  owl_registry_db_volume: null
+  owl_grafana_volume: null

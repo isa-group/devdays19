@@ -1,0 +1,345 @@
+<style>
+    #editorWrapper>div:nth-child(2) {
+        right: 1em;
+        bottom: 1em;
+        display: block;
+    }
+
+    #sco-header {
+        font-family: sans-serif, times;
+        font-size: 1.2em;
+    }
+
+    #sco-tabs-container .nav-tabs {
+        border-bottom: none;
+    }
+
+    #sco-tabs-container .nav-tabs>li.active>a {
+        color: #ffffff;
+        background-color: #428bca;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 1.2em;
+        padding-bottom: 7px;
+        /* border: 0.17em solid #ddd; */
+    }
+
+    #modelBoardContent>table>tbody>tr:nth-child(1)>td:nth-child(2) {
+        background: #f7f7f7;
+    }
+
+    p.separator {
+        height: 20px;
+    }
+
+    .table {
+        margin-top: -1px !important;
+        font-family: Arial;
+    }
+
+    #sco-header span[contenteditable],
+    .table span[contenteditable] {
+        border-bottom: 1px dotted black;
+    }
+
+    .table td {
+        border: 1px solid white;
+    }
+
+    .table tr td {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .table tr>td.title,
+    td.caption {
+        font-weight: bold;
+    }
+
+    /* .table tr:nth-child(even)>td.title {
+        background: #428bca;
+        color: white;
+    } */
+
+    /* .table tr:nth-child(odd)>td.title { */
+
+    .table tr>td.title {
+        background: #f7f7f7;
+    }
+
+    /* .table tr:nth-child(2n) {
+        background-color: #ECEFF1;
+    }*/
+
+    .table tr:nth-child(2n+3) {
+        background-color: #f7f7f7;
+    }
+
+    .table td.description {
+        /* height: 7em; */
+    }
+
+    .no-spacing {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .tooltip2 {
+        position: relative;
+    }
+
+    .tooltip2 .tooltiptext2 {
+        visibility: hidden;
+        width: 120px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip2 .tooltiptext2::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip2:hover .tooltiptext2 {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<script>
+
+    var timer = null;
+
+
+    function getQueryVariable(variable) {
+        var query = document.location.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) == variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        console.log('Query variable %s not found', variable);
+    }
+
+    function refresh() {
+        var redirect = Number(getQueryVariable("r")) || 0;
+
+        console.log("redirect (" + redirect + ")...");
+
+        if (redirect <= 3) {
+            var currentLocation = document.location.href;
+
+            if (redirect == 0)
+                var charRemoved = 0;
+            else
+                var charRemoved = 4;
+
+            var requestURL = currentLocation.substr(0, currentLocation.length - charRemoved) + "&r=" + (redirect + 1);
+
+            console.log("redirecting to <" + requestURL + ">...");
+            document.location = requestURL;
+
+        } else {
+            window.alert("There is a problem creating the TPA. Please contact administrator");
+            console.log("permanent problem!");
+            document.location = "/";
+            clearInterval(timer);
+        }
+    };
+
+    var model = getQueryVariable("model");
+    console.log("Retrieving model: <" + model + ">...");
+    var jqxhr = $.get(model)
+        .done(function () {
+            console.log("Success.");
+        })
+        .fail(function () {
+            timer = setInterval(refresh, 2000);
+            console.log("Error.");
+        });
+</script>
+
+<!-- <div id="sco-buttons-container">
+    <button class="btn btn-primary" id="mapCompensations">  <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>Dashboard</button>
+</div> -->
+<div id="preloader" ng-show="!modelLoaded">
+    <div class="preloader_img"></div>
+</div>
+<div nghide ng-show="modelLoaded">
+    <div id="sco-header" class="row">
+        <div class="col-xs-12 col-md-5" style="zoom: 0.75;">
+            <div>
+                <h3>
+                    TPA: {{model.id}}
+                    <sup style="color:red" ng-if="!allowModify">Read only</sup>
+                    <sup style="color:green" ng-if="allowModify">Modifiable</sup>
+                    <a href="http://localhost:8081/api/v6/agreements/{{model.id}}" target="_blank"
+                        class="btn btn-info btn-lg">
+                        View source
+                    </a>
+                </h3>
+            </div>
+            <div>
+                <span>
+                    <strong>Start date:</strong>
+                </span>
+                <span>{{model.context.validity.initial}}</span>
+                <br>
+                <span>
+                    <strong>Project:</strong>
+                </span>
+                <span>{{model.context.definitions.scopes.development.project.default}}</span>
+                <br>
+                <span>
+                    <strong>Repository:</strong>
+                </span>
+                <span>{{model.context.definitions.scopes.development.owner.default}}/{{model.context.definitions.scopes.development.name.default}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-7 pull-right" style="padding-top: 0.5em;
+        max-width: 30em;
+        right: 0;
+        margin-right: 1em;
+        zoom: 0.8;">
+            <div class="row" style="padding: 0.5em 1.5em;">
+                <div ng-init="reporterStatus=false;">
+                    <a target="_blank"
+                        href="{{model.context.infrastructure.dashboard}}/dashboard/script/remote_dashboard.js?dashboardURL=http://localhost:5000/api/v4/dashboards/{{model.id}}/cabrales"
+                        class="btn btn-success btn-lg">
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="separator"></p>
+
+    <div id="sco-tabs-container">
+        <!-- TABS -->
+        <h2 style="background-color: lightgray">Metrics</h2>
+        <ul class="nav nav-tabs">
+            <li ng-repeat="(key,val) in model.terms.metrics track by key" style="padding-right: 1.5em">
+                <div>
+                    <h4 style="float: left; background-color: #e5e5e5">{{key}}</h4>
+                    <br>
+                </div>
+                <br>
+                <b>Computing</b>: <span>{{val.measure.computing}}</span><br>
+                <b>Element</b>: <span
+                    ng-if="!isObject(val.measure.element)"><span>{{val.measure.element}}</span></span><br>
+                <span ng-if="isObject(val.measure.element)">
+                    <ul>
+                        <li ng-repeat="(elem,elemval) in val.measure.element track by elem">
+                            <b>{{elem}}</b>:
+                            <ul>
+                                <li ng-repeat="(elemfil,elemfilval) in elemval track by elemfil">
+                                    <b>{{elemfil}}</b>:
+                                    <span ng-if="!isObject(elemfilval)">
+                                        <span>{{elemfilval}}</span><br>
+                                    </span>
+                                    <span ng-if="isObject(elemfilval)">
+                                        <ul>
+                                            <li ng-repeat="(elfilkey, elfilval) in elemfilval track by elfilkey">
+                                                <b>{{elfilkey}}</b>: <span>{{elfilval}}</span><br>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </span>
+                <b>Filters</b>: <br>
+                <ul>
+                    <li ng-repeat="(key2,val2) in val.measure.filters track by key2">
+                        <b>{{key2}}</b>:
+                        <span ng-if="!isObject(val2)"><span>{{val2}}</span><br></span>
+                        <span ng-if="isObject(val2)">
+                            <ul>
+                                <li ng-repeat="(filkey, filval) in val2 track by filkey">
+                                    <b>{{filkey}}</b>: <span>{{filval}}</span>
+                                </li>
+                            </ul>
+                        </span>
+                    </li>
+                </ul>
+                <span ng-if="val.measure.offset !== undefined">
+                    <b>Offset</b>: <span>{{val.measure.offset}}</span><br>
+                </span>
+                <br>
+            </li>
+        </ul>
+
+        <p class="separator"></p>
+
+        <h2 style="background-color: lightgray">Team practices</h2>
+        <ul class="nav">
+            <li ng-repeat="g in model.terms.guarantees track by g.id">
+                <div>
+                    <h4 style="float: left; background-color: #e5e5e5">{{g.id}}</h4>
+                    <br>
+                </div>
+                <br>
+                <b>Objective</b>: <span>{{g.of[0].objective}}</span><br>
+                <b>Description</b>: <span>{{g.description}}</span><br>
+                <br>
+            </li>
+            <!-- <li ng-if="!!model.terms.metrics[m]" ng-repeat="m in metricsName">
+            <a href="#tab" data-toggle="tab" ng-click="updateSpuAndGuaranteeIndex(getMetricNameMask(m), model.terms.guarantees)">{{getMetricNameMask(m)}}</a>
+        </li> -->
+        </ul>
+        <!-- Content 
+        <div class="tab-content">
+            <div class="tab-pane fade in" id="tab{{g.id}}" ng-if="g.id !== 'SCO_K06_C'" ng-repeat="g in model.terms.guarantees" ng-class="{active: $index == 0}">
+                  <p>{{g.id}}</p>
+            </div>
+            <div class="tab-pane fade in" id="tab{{getMetricNameMask(m)}}"  ng-if="!!model.terms.metrics[m]" ng-repeat="m in metricsName" ng-class="{active: $index == 0}">
+                  <p>{{getMetricNameMask(m)}}</p>
+            </div>
+          </div>
+          -->
+    </div>
+
+
+    <!-- <table class="table" style="
+    border-left: 0.18em solid #ddd;
+    border-right: 0.18em solid #ddd;
+    border-bottom: 0.18em solid #ddd;
+    border-top: 0.18em solid #ddd;"> -->
+    <table class="table">
+        <!-- <tr>
+        <td class="title">Nombre</td>
+        <td colspan="2">
+            <span contenteditable ng-model="model.terms.metrics[getMetricNameUnMask(sco)].metadata.name"></span>
+        </td>
+    </tr> -->
+
+
+
+
+
+    </table>
+</div>
+</div>
+</div>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script src="https://momentjs.com/downloads/moment-timezone-with-data.js"></script>

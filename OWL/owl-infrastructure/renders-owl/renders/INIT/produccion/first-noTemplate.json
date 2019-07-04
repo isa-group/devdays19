@@ -1,0 +1,196 @@
+{
+    "id": "tpa-2233911",
+    "version": "1.0.0",
+    "iagree": "5.0.0",
+    "type": "agreement",
+    "context": {
+        "validity": {
+            "initial": "2018-01-01",
+            "timeZone": "America/Los_Angeles"
+        },
+        "infrastructure": {
+            "registry": "http://registry.cabrales.governify.io/api/v6",
+            "reporter": "http://reporter.cabrales.governify.io/api/v4",
+            "render": "https://ui.cabrales.governify.io/render?model=/renders/SCO/produccion/sco-consultas-produccion.json&view=/renders/SCO/produccion/sco-consultas-produccion.html&ctrl=/renders/SCO/produccion/sco-consultas-produccion.js",
+            "dashboard": "http://dashboard.cabrales.governify.io"
+        },
+        "definitions": {
+            "schemas": {},
+            "scopes": {
+                "development": {
+                    "member": {
+                        "name": "Member",
+                        "description": "Member of a project",
+                        "type": "string"
+                    },
+                    "project": {
+                        "name": "Project",
+                        "description": "Project",
+                        "type": "string",
+                        "default": "2233911"
+                    },
+                    "class": {
+                        "name": "Class",
+                        "description": "Group some projects",
+                        "type": "string",
+                        "default": "CS169"
+                    }
+                }
+            },
+            "computers": {
+                "pt": {
+                    "url": "http://pt.computer.cabrales.governify.io",
+                    "apiVersion": "1",
+                    "config": {
+                        "measures": "https://gist.githubusercontent.com/raffrearaUS/e3a7fb6eea67e175e3409413646cdc1e/raw/aca81072a9911ac4c83f698306832ca750a79d75/cabmeasure.json",
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://registry.cabrales.governify.io/static/holidays.json"
+                    }
+                }
+            }
+        }
+    },
+    "terms": {
+        "metrics": {
+            "NUMBER_OF_STARTED_STORIES": {
+                "computer": {
+                    "$ref": "#/context/definitions/computers/pivotaltracker",
+                    "name": "/indicators/NUMBER_OF_STARTED_STORIES"
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "number",
+                    "filters": {
+                        "type": "feature,bug,chore,release",
+                        "state": "started"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "STARTED_STORIES": {
+                "computer": {
+                    "$ref": "#/context/definitions/computers/pivotaltracker",
+                    "name": "/indicators/STARTED_STORIES"
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "stories",
+                    "filters": {
+                        "type": "feature,bug,chore,release",
+                        "state": "started"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            }
+        },
+        "guarantees": [
+            {
+                "id": "ONE_STORY_AT_A_TIME",
+                "description": "Only one story per person can be started at a time",
+                "scope": {
+                    "member": {
+                        "$ref": "#/context/definitions/scopes/development/member"
+                    },
+                    "project": {
+                        "$ref": "#/context/definitions/scopes/development/project"
+                    },
+                    "class": {
+                        "$ref": "#/context/definitions/scopes/development/class"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "member": "*"
+                        },
+                        "objective": "NUMBER_OF_STARTED_STORIES <= 1",
+                        "with": {
+                            "NUMBER_OF_STARTED_STORIES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "yearly",
+                            "initial": "2018-01-01"
+                        },
+                        "evidences": [
+                            {
+                                "STARTED_STORIES": {
+                                    "$ref": "#/terms/metrics/STARTED_STORIES"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "POINTED_BEFORE_BACKLOG_GUARANTEE",
+                "description": "Every story must be given an estimation before being moved to the backlog",
+                "scope": {
+                    "member": {
+                        "$ref": "#/context/definitions/scopes/development/member"
+                    },
+                    "project": {
+                        "$ref": "#/context/definitions/scopes/development/project"
+                    },
+                    "class": {
+                        "$ref": "#/context/definitions/scopes/development/class"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "member": "*"
+                        },
+                        "objective": "POINTED_BEFORE_BACKLOG == 0",
+                        "with": {
+                            "POINTED_BEFORE_BACKLOG": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "yearly",
+                            "initial": "2018-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "STARTED_STORY_PRIORITY_GUARANTEE",
+                "description": "Stories must be started in the same order that they appear in the backlog",
+                "scope": {
+                    "member": {
+                        "$ref": "#/context/definitions/scopes/development/member"
+                    },
+                    "project": {
+                        "$ref": "#/context/definitions/scopes/development/project"
+                    },
+                    "class": {
+                        "$ref": "#/context/definitions/scopes/development/class"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "member": "*"
+                        },
+                        "objective": "STARTED_STORY_PRIORITY <= 1",
+                        "with": {
+                            "STARTED_STORY_PRIORITY": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "yearly",
+                            "initial": "2018-01-01"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

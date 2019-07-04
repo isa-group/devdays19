@@ -1,0 +1,677 @@
+{
+    "id": "tpa-1313131313",
+    "version": "1.0.0",
+    "type": "agreement",
+    "context": {
+        "validity": {
+            "initial": "2019-01-01",
+            "timeZone": "Europe/Madrid"
+        },
+        "infrastructure": {
+            "registry": "http://localhost:8081/api/v6",
+            "reporter": "http://localhost:5000/api/v4",
+            "render": "http://localhost:8080/render?model=http://localhost:8081/api/v6/agreements/tpa-1010101010&view=/renders/tpa/default.html&ctrl=/renders/tpa/default.js",
+            "dashboard": "http://localhost:3000"
+        },
+        "definitions": {
+            "schemas": {},
+            "scopes": {
+                "development": {
+                    "member": {
+                        "name": "Member",
+                        "description": "Member of a project",
+                        "type": "string"
+                    },
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                }
+            },
+            "computers": {
+                "pivotaltracker": {
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                }
+            }
+        }
+    },
+    "terms": {
+        "metrics": {
+            "PERCENTAGE_SUCCESSFULLY_FINISHED_1P_ISSUES": {
+                "computer": {
+                    "name": "/indicators/PERCENTAGE_SUCCESSFULLY_FINISHED_1P_ISSUES",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": {
+                        "percentage": {
+                            "transition": {
+                                "fromState": "in_progress",
+                                "toState": "done",
+                                "duration": "< 1440"
+                            }
+                        }
+                    },
+                    "filters": {
+                        "type": "feature",
+                        "state": "done,delivered",
+                        "estimate": 1
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "PERCENTAGE_SUCCESSFULLY_DELIVERED_1P_ISSUES": {
+                "computer": {
+                    "name": "/indicators/PERCENTAGE_SUCCESSFULLY_DELIVERED_1P_ISSUES",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": {
+                        "percentage": {
+                            "transition": {
+                                "fromState": "in_progress",
+                                "toState": "delivered",
+                                "duration": "< 4320"
+                            }
+                        }
+                    },
+                    "filters": {
+                        "type": "feature",
+                        "state": "delivered",
+                        "estimate": 1
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "PERCENTAGE_OF_1P_ISSUES": {
+                "computer": {
+                    "name": "/indicators/PERCENTAGE_OF_1P_ISSUES",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": {
+                        "percentage": {
+                            "estimate": 1
+                        }
+                    },
+                    "filters": {
+                        "type": "feature",
+                        "state": "in_progress,done,delivered"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "NUMBER_OF_STARTED_ISSUES": {
+                "computer": {
+                    "name": "/indicators/NUMBER_OF_STARTED_ISSUES",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "number",
+                    "filters": {
+                        "type": "feature,bug,chore",
+                        "state": "in_progress"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "REMAINING_POINTS": {
+                "computer": {
+                    "name": "/indicators/REMAINING_POINTS",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "points",
+                    "filters": {
+                        "type": "feature",
+                        "state": "to_do"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "CURRENT_FINISHED_ISSUES": {
+                "computer": {
+                    "name": "/indicators/CURRENT_FINISHED_ISSUES",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "number",
+                    "filters": {
+                        "type": "feature,bug,chore",
+                        "state": "done,delivered"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "FINISHED_ISSUES_THREE_DAYS_AGO": {
+                "computer": {
+                    "name": "/indicators/FINISHED_ISSUES_THREE_DAYS_AGO",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "number",
+                    "filters": {
+                        "type": "feature,bug,chore",
+                        "state": "done,delivered"
+                    },
+                    "offset": -3,
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "CURRENT_DELIVERED_POINTS": {
+                "computer": {
+                    "name": "/indicators/CURRENT_DELIVERED_POINTS",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "points",
+                    "filters": {
+                        "type": "feature,bug,chore",
+                        "state": "delivered"
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "DELIVERED_POINTS_THREE_DAYS_AGO": {
+                "computer": {
+                    "name": "/indicators/DELIVERED_POINTS_THREE_DAYS_AGO",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "points",
+                    "filters": {
+                        "type": "feature,bug,chore",
+                        "state": "delivered"
+                    },
+                    "offset": -3,
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            },
+            "SHORT_CYCLE_TIME_ISSUES": {
+                "computer": {
+                    "name": "/indicators/SHORT_CYCLE_TIME_ISSUES",
+                    "url": "http://localhost:8082",
+                    "apiVersion": "1",
+                    "config": {
+                        "schedules": {
+                            "24x7": "L-DT00:00-23:59/H",
+                            "normal": "[{\"from\":\"1/1\",\"to\":\"6/14\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"6/15\",\"to\":\"9/15\",\"schedule\":\"L-VT08:30-15:00/H\"},{\"from\":\"9/16\",\"to\":\"12/23\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/24\",\"to\":\"12/24\",\"schedule\":\"L-VT09:00-13:00/H\"},{\"from\":\"12/25\",\"to\":\"12/30\",\"schedule\":\"L-VT09:00-18:00/H\"},{\"from\":\"12/31\",\"to\":\"12/31\",\"schedule\":\"L-VT09:00-13:00/H\"}]"
+                        },
+                        "holidays": "http://localhost:8081/static/holidays.json"
+                    }
+                },
+                "measure": {
+                    "computing": "actual",
+                    "element": "number",
+                    "filters": {
+                        "type": "feature",
+                        "state": "delivered",
+                        "transition": {
+                            "fromState": "in_progress",
+                            "toState": "delivered",
+                            "duration": "< 60"
+                        }
+                    },
+                    "scope": {
+                        "$ref": "#/context/definitions/scopes/development"
+                    }
+                }
+            }
+        },
+        "guarantees": [
+            {
+                "id": "1P_ISSUES_SUCCESSFULLY_FINISHED_ON_TIME",
+                "description": "A one-point issue should take less than a day to finish",
+                "scope": {
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "project": "1010101010"
+                        },
+                        "objective": "PERCENTAGE_SUCCESSFULLY_FINISHED_1P_ISSUES >= 75",
+                        "with": {
+                            "PERCENTAGE_SUCCESSFULLY_FINISHED_1P_ISSUES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "1P_ISSUES_SUCCESSFULLY_DELIVERED_ON_TIME",
+                "description": "A one-point issue should take less than three days to deliver",
+                "scope": {
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "project": "1010101010"
+                        },
+                        "objective": "PERCENTAGE_SUCCESSFULLY_DELIVERED_1P_ISSUES >= 75",
+                        "with": {
+                            "PERCENTAGE_SUCCESSFULLY_DELIVERED_1P_ISSUES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "MAJORITY_OF_1P_ISSUES",
+                "description": "More than half of started features should be 1-point",
+                "scope": {
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "project": "1010101010"
+                        },
+                        "objective": "PERCENTAGE_OF_1P_ISSUES >= 50",
+                        "with": {
+                            "PERCENTAGE_OF_1P_ISSUES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "ONE_STORY_AT_A_TIME",
+                "description": "Only one issue per person can be started at a time",
+                "scope": {
+                    "member": {
+                        "name": "Member",
+                        "description": "Member of a project",
+                        "type": "string"
+                    },
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "member": "*"
+                        },
+                        "objective": "NUMBER_OF_STARTED_ISSUES <= 1",
+                        "with": {
+                            "NUMBER_OF_STARTED_ISSUES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "NO_REMAINING_POINTS",
+                "description": "A team should finish the backlog by the end of an iteration",
+                "scope": {
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "project": "1010101010"
+                        },
+                        "objective": "REMAINING_POINTS == 0",
+                        "with": {
+                            "REMAINING_POINTS": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "biweekly",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "INCREMENT_OF_FINISHED_ISSUES",
+                "description": "Students should finish at least one issue every three days",
+                "scope": {
+                    "member": {
+                        "name": "Member",
+                        "description": "Member of a project",
+                        "type": "string"
+                    },
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "member": "*"
+                        },
+                        "objective": "CURRENT_FINISHED_ISSUES - FINISHED_ISSUES_THREE_DAYS_AGO > 0",
+                        "with": {
+                            "FINISHED_ISSUES_THREE_DAYS_AGO": {},
+                            "CURRENT_FINISHED_ISSUES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "INCREMENT_OF_DELIVERED_POINTS",
+                "description": "A team should deliver at least one point every three days",
+                "scope": {
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "project": "1010101010"
+                        },
+                        "objective": "CURRENT_DELIVERED_POINTS - DELIVERED_POINTS_THREE_DAYS_AGO > 0",
+                        "with": {
+                            "DELIVERED_POINTS_THREE_DAYS_AGO": {},
+                            "CURRENT_DELIVERED_POINTS": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "NO_SHORT_CYCLE_TIME_ISSUES",
+                "description": "The cycle time of an issue should not be less than 1 hour",
+                "scope": {
+                    "project": {
+                        "name": "Project",
+                        "description": "Repository project",
+                        "type": "string",
+                        "default": "1010101010"
+                    },
+                    "name": {
+                        "name": "Name",
+                        "description": "Repository name",
+                        "type": "string",
+                        "default": "1212121212"
+                    },
+                    "owner": {
+                        "name": "Owner",
+                        "description": "Repository owner",
+                        "type": "string",
+                        "default": "2323232323"
+                    }
+                },
+                "of": [
+                    {
+                        "scope": {
+                            "project": "1010101010"
+                        },
+                        "objective": "SHORT_CYCLE_TIME_ISSUES == 0",
+                        "with": {
+                            "SHORT_CYCLE_TIME_ISSUES": {}
+                        },
+                        "window": {
+                            "type": "static",
+                            "period": "daily",
+                            "initial": "2019-01-01"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
