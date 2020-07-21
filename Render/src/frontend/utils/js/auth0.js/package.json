@@ -44,7 +44,7 @@
     "winchan": "^0.2.0"
   },
   "devDependencies": {
-    "codecov": "^1.0.1",
+    "codecov": "^3.7.1",
     "component-cdn-uploader": "auth0/component-cdn-uploader#v1.3.0",
     "eslint": "3.12.2",
     "eslint-config-auth0-base": "6.0.0",
