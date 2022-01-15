@@ -44,7 +44,7 @@
     "path": "^0.12.7",
     "protractor": "^5.3.2",
     "request": "^2.86.0",
-    "shelljs": "^0.8.2",
+    "shelljs": "^0.8.5",
     "winston": "^2.4.2",
     "basic-auth": "^2.0.0"
   },
