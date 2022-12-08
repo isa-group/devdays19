@@ -34,7 +34,7 @@
     "bower": "^1.8.2",
     "compression": "^1.7.2",
     "cors": "^2.8.4",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "express-fileupload": "^0.4.0",
     "fs-extra": "^6.0.1",
     "helmet": "^3.12.0",
